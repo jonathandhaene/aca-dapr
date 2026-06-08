@@ -1,0 +1,27 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "acrName": {
+      "value": "<your-acr-name>"
+    },
+    "storageAccountName": {
+      "value": "<globallyuniquestorageacct>"
+    },
+    "serviceBusNamespaceName": {
+      "value": "<unique-sb-namespace-name>"
+    },
+    "serviceBusDefaultMessageTimeToLive": {
+      "value": "P14D"
+    },
+    "stateBlobRetentionDays": {
+      "value": 30
+    },
+    "checkoutImage": {
+      "value": "<your-acr-name>.azurecr.io/checkout-service:latest"
+    },
+    "inventoryImage": {
+      "value": "<your-acr-name>.azurecr.io/inventory-service:latest"
+    }
+  }
+}
