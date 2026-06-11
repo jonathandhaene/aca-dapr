@@ -64,27 +64,34 @@ echo "Using ACR: $ACR_LOGIN_SERVER"
 az group create -n "$RESOURCE_GROUP" -l "$LOCATION" >/dev/null
 az acr login -n "$ACR_NAME"
 
-echo "Building and pushing checkout-service image..."
-docker build -t "$ACR_LOGIN_SERVER/checkout-service:latest" ./apps/checkout-service
-docker push "$ACR_LOGIN_SERVER/checkout-service:latest"
+echo "Building and pushing dispatcher image..."
+docker build -t "$ACR_LOGIN_SERVER/dispatcher:latest" ./apps/level1-dispatcher
+docker push "$ACR_LOGIN_SERVER/dispatcher:latest"
 
-echo "Building and pushing inventory-service image..."
-docker build -t "$ACR_LOGIN_SERVER/inventory-service:latest" ./apps/inventory-service
-docker push "$ACR_LOGIN_SERVER/inventory-service:latest"
+echo "Building and pushing level0-job image..."
+docker build -t "$ACR_LOGIN_SERVER/level0-job:latest" ./apps/level0-job
+docker push "$ACR_LOGIN_SERVER/level0-job:latest"
+
+echo "Building and pushing level2-job image..."
+docker build -t "$ACR_LOGIN_SERVER/level2-job:latest" ./apps/level2-job
+docker push "$ACR_LOGIN_SERVER/level2-job:latest"
 
 echo "Deploying infrastructure and apps..."
 az deployment group create \
   -g "$RESOURCE_GROUP" \
   -f infra/main.bicep \
   -p "@$PARAMS_FILE" \
-  -p checkoutImage="$ACR_LOGIN_SERVER/checkout-service:latest" \
-     inventoryImage="$ACR_LOGIN_SERVER/inventory-service:latest" \
+  -p dispatcherImage="$ACR_LOGIN_SERVER/dispatcher:latest" \
+     level0Image="$ACR_LOGIN_SERVER/level0-job:latest" \
+     level2Image="$ACR_LOGIN_SERVER/level2-job:latest" \
   --query properties.outputs -o json
 
 echo "Deployment complete."
 
-echo "Checkout URL:"
-az containerapp show -g "$RESOURCE_GROUP" -n checkout-service --query properties.configuration.ingress.fqdn -o tsv
+echo "Dispatcher URL:"
+az containerapp show -g "$RESOURCE_GROUP" -n dispatcher --query properties.configuration.ingress.fqdn -o tsv
 
-echo "Inventory URL:"
-az containerapp show -g "$RESOURCE_GROUP" -n inventory-service --query properties.configuration.ingress.fqdn -o tsv
+echo
+echo "To run the pipeline, start the Level 0 producer jobs:"
+echo "  az containerapp job start -g $RESOURCE_GROUP -n level0-job1   # orders feed"
+echo "  az containerapp job start -g $RESOURCE_GROUP -n level0-job2   # signups feed"

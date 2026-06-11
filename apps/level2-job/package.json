@@ -1,5 +1,5 @@
 {
-  "name": "checkout-service",
+  "name": "level2-job",
   "version": "1.0.0",
   "private": true,
   "type": "module",
@@ -7,6 +7,6 @@
     "start": "node src/index.js"
   },
   "dependencies": {
-    "express": "^4.19.2"
+    "@azure/service-bus": "^7.9.5"
   }
 }

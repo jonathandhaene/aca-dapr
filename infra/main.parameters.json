@@ -5,23 +5,20 @@
     "acrName": {
       "value": "<your-acr-name>"
     },
-    "storageAccountName": {
-      "value": "<globallyuniquestorageacct>"
-    },
     "serviceBusNamespaceName": {
       "value": "<unique-sb-namespace-name>"
     },
     "serviceBusDefaultMessageTimeToLive": {
       "value": "P14D"
     },
-    "stateBlobRetentionDays": {
-      "value": 30
+    "dispatcherImage": {
+      "value": "<your-acr-name>.azurecr.io/dispatcher:latest"
     },
-    "checkoutImage": {
-      "value": "<your-acr-name>.azurecr.io/checkout-service:latest"
+    "level0Image": {
+      "value": "<your-acr-name>.azurecr.io/level0-job:latest"
     },
-    "inventoryImage": {
-      "value": "<your-acr-name>.azurecr.io/inventory-service:latest"
+    "level2Image": {
+      "value": "<your-acr-name>.azurecr.io/level2-job:latest"
     }
   }
 }
